@@ -19,6 +19,20 @@ export interface CrudResultProps {
   user: Omit<UserProps, "password">;
 }
 
+export async function getUser(user: UserProps) {
+  try {
+    const dataUser = (await prisma.user.findFirst({
+      where: {
+        email: user.email,
+      },
+    })) as UserProps;
+
+    return dataUser;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function createUser({ user }: CrudUserProps) {
   const { email, name } = user;
 

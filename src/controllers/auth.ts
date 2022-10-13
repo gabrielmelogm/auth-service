@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import { UserProps } from "../services/user/user";
 
 export async function hashPassword(password: string) {
   const hash = await bcrypt.hash(password, 10);
@@ -8,4 +9,11 @@ export async function hashPassword(password: string) {
 export async function comparePassword(password: string, hash: string) {
   const result = await bcrypt.compare(password, hash);
   return result;
+}
+
+export function verifyInformations(user: UserProps) {
+  if (!user.id || !user.email || !user.name || !user.password) {
+    const response = { message: "Requested data not found" };
+    return response;
+  }
 }
