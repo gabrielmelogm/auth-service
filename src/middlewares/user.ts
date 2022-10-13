@@ -1,25 +1,17 @@
 import { route } from "../index";
 import { prisma } from "../database/prisma";
 import { Request, Response, NextFunction } from "express";
+import { userExist } from "../controllers/user";
 
 export function User() {
   route.use(
     "/createUser",
     async (req: Request, res: Response, next: NextFunction) => {
-      const response = await prisma.user.findFirst({
-        select: {
-          email: true,
-          password: false,
-        },
-        where: {
-          email: req.body.email,
-        },
-      });
+      const user = await userExist(req.body.email);
 
       if (!req.body.email)
         return res.status(400).json({ error: "Email is not informed" });
-      if (response?.email)
-        return res.status(400).json({ error: "Email already exist" });
+      if (user) return res.status(400).json({ error: "Email already exist" });
       if (!req.body.name)
         return res.status(400).json({ error: "Name is not informed" });
       if (!req.body.password)
