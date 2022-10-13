@@ -3,13 +3,15 @@ import { User } from "./middlewares/user";
 import { Request, Response } from "express";
 import { createUser, deleteUser } from "./services/user/user";
 import { UserProps, CrudResultProps } from "./services/user/user";
+import { sayHello } from "./services/hello/hello";
 
 export function Routes() {
   User();
 
-  route.get("/", (req: Request, res: Response) =>
-    res.status(200).json({ message: "Hello World" })
-  );
+  route.get("/", (req: Request, res: Response) => {
+    const response = sayHello();
+    res.status(200).json({ message: response });
+  });
 
   route.post("/createUser", async (req: Request, res: Response) => {
     const user: UserProps = req.body;
