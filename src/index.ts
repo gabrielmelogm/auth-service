@@ -1,6 +1,5 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import { Routes } from "./routes";
-import { createUser } from "./services/user/user";
 
 process.on("SIGTERM", () => process.exit());
 

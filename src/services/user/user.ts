@@ -1,3 +1,4 @@
+import { hashPassword } from "../../controllers/auth";
 import { userExist } from "../../controllers/user";
 import { prisma } from "../../database/prisma";
 
@@ -19,7 +20,9 @@ export interface CrudResultProps {
 }
 
 export async function createUser({ user }: CrudUserProps) {
-  const { email, name, password } = user;
+  const { email, name } = user;
+
+  const password = await hashPassword(user.password);
 
   try {
     const userEmail = await userExist(email);
@@ -32,7 +35,7 @@ export async function createUser({ user }: CrudUserProps) {
           name: true,
           password: false,
         },
-        data: { email, name, password },
+        data: { email, name, password: String(password) },
       });
 
       const response: CrudResultProps = {
