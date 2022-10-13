@@ -1,7 +1,7 @@
 import { route } from "../index";
 import { Request, Response, NextFunction } from "express";
 
-export function User() {
+export function UserMiddleware() {
   route.use(
     "/createUser",
     async (req: Request, res: Response, next: NextFunction) => {

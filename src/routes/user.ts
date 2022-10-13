@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { route } from "..";
-import { User } from "../middlewares/user";
+import { UserMiddleware } from "../middlewares/user";
 import {
   createUser,
   CrudResultProps,
@@ -9,7 +9,7 @@ import {
 } from "../services/user/user";
 
 export function UsersRoute() {
-  User();
+  UserMiddleware();
 
   route.post("/createUser", async (req: Request, res: Response) => {
     const user: UserProps = req.body;
