@@ -18,7 +18,7 @@ export function Routes() {
 
     const response = (await createUser({ user })) as CrudResultProps;
 
-    if (response.message === "User deleted successfully") {
+    if (response.message === "User created successfully") {
       res.status(201).json(response);
     } else {
       res.status(400).json(response);
