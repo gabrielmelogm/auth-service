@@ -1,17 +1,15 @@
-import { route } from ".";
-import { User } from "./middlewares/user";
 import { Request, Response } from "express";
-import { createUser, deleteUser } from "./services/user/user";
-import { UserProps, CrudResultProps } from "./services/user/user";
-import { sayHello } from "./services/hello/hello";
+import { route } from "..";
+import { UserMiddleware } from "../middlewares/user";
+import {
+  createUser,
+  CrudResultProps,
+  deleteUser,
+  UserProps,
+} from "../services/user/user";
 
-export function Routes() {
-  User();
-
-  route.get("/", (req: Request, res: Response) => {
-    const response = sayHello();
-    res.status(200).json({ message: response });
-  });
+export function UsersRoute() {
+  UserMiddleware();
 
   route.post("/createUser", async (req: Request, res: Response) => {
     const user: UserProps = req.body;
