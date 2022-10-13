@@ -1,9 +1,8 @@
 import { route } from ".";
-import { prisma } from "./database/prisma";
 import { User } from "./middlewares/user";
 import { Request, Response } from "express";
-import { createUser } from "./services/user/user";
-import { User as UserProps } from "@prisma/client";
+import { createUser, deleteUser } from "./services/user/user";
+import { UserProps, CrudResultProps } from "./services/user/user";
 
 export function Routes() {
   User();
@@ -13,19 +12,14 @@ export function Routes() {
   );
 
   route.post("/createUser", async (req: Request, res: Response) => {
-    const { email, name, password } = req.body;
+    const user: UserProps = req.body;
 
-    const response = (await createUser({ email, name, password })) as Omit<
-      UserProps,
-      "password"
-    >;
+    const response = (await createUser({ user })) as CrudResultProps;
 
-    if (response.id) {
-      res
-        .status(201)
-        .json({ message: "User create successfully", user: response });
+    if (response.message === "User deleted successfully") {
+      res.status(201).json(response);
     } else {
-      res.status(500).json({ message: "Unexpected error" });
+      res.status(400).json(response);
     }
   });
 
@@ -33,10 +27,13 @@ export function Routes() {
     const email = req.params.email;
 
     try {
-      await prisma.user.delete({
-        where: { email: String(email) },
-      });
-      return res.status(200).json({ message: "User deleted successfully" });
+      const response = (await deleteUser(email)) as CrudResultProps;
+
+      if (response.message === "User deleted successfully") {
+        res.status(200).json(response);
+      } else {
+        res.status(400).json(response);
+      }
     } catch (error) {
       console.error(error);
       return res.status(400).send(error);

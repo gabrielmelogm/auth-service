@@ -1,18 +1,31 @@
 import { userExist } from "../../controllers/user";
 import { prisma } from "../../database/prisma";
 
-interface CreateUserProps {
+export interface UserProps {
+  id?: string;
   email: string;
   name: string;
   password: string;
 }
 
-export async function createUser({ email, name, password }: CreateUserProps) {
-  try {
-    const user = await userExist(email);
+export interface CrudUserProps {
+  message?: string;
+  user: UserProps;
+}
 
-    if (!user) {
-      const response = await prisma.user.create({
+export interface CrudResultProps {
+  message: string;
+  user: Omit<UserProps, "password">;
+}
+
+export async function createUser({ user }: CrudUserProps) {
+  const { email, name, password } = user;
+
+  try {
+    const userEmail = await userExist(email);
+
+    if (!userEmail) {
+      const user = await prisma.user.create({
         select: {
           id: true,
           email: true,
@@ -21,12 +34,46 @@ export async function createUser({ email, name, password }: CreateUserProps) {
         },
         data: { email, name, password },
       });
+
+      const response: CrudResultProps = {
+        message: "User created successfully",
+        user,
+      };
       return response;
     } else {
-      return console.log("User already exist");
+      const response = { message: "User already exist" };
+      return response;
     }
   } catch (error) {
     console.error(error);
-    return error;
+  }
+}
+
+export async function deleteUser(email: string) {
+  try {
+    const userEmail = await userExist(email);
+
+    if (userEmail) {
+      const user = await prisma.user.delete({
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          password: false,
+        },
+        where: { email: String(email) },
+      });
+
+      const response: CrudResultProps = {
+        message: "User deleted successfully",
+        user,
+      };
+      return response;
+    } else {
+      const response = { message: "User not found" };
+      return response;
+    }
+  } catch (error) {
+    console.error(error);
   }
 }
