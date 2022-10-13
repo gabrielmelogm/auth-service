@@ -1,10 +1,10 @@
 import { route } from ".";
 import { prisma } from "./database/prisma";
-import { Auth } from "./middlewares/auth";
+import { User } from "./middlewares/user";
 import { Request, Response } from "express";
 
 export function Routes() {
-  Auth();
+  User();
 
   route.get("/", (req: Request, res: Response) =>
     res.status(200).json({ message: "Hello World" })
@@ -23,7 +23,7 @@ export function Routes() {
   });
 
   route.delete("/deleteUser/:email", async (req: Request, res: Response) => {
-    const email = req.query.email;
+    const email = req.params.email;
 
     try {
       await prisma.user.delete({

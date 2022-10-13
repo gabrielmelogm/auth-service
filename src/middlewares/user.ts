@@ -2,7 +2,7 @@ import { route } from "../index";
 import { prisma } from "../database/prisma";
 import { Request, Response, NextFunction } from "express";
 
-export function Auth() {
+export function User() {
   route.use(
     "/createUser",
     async (req: Request, res: Response, next: NextFunction) => {
@@ -30,9 +30,9 @@ export function Auth() {
   );
 
   route.use(
-    "/deleteUser",
+    "/deleteUser/:email",
     async (req: Request, res: Response, next: NextFunction) => {
-      if (!req.query.email)
+      if (!req.params.email)
         return res.status(400).json({ error: "Email is not informed" });
 
       const user = await prisma.user.findFirst({
@@ -40,12 +40,14 @@ export function Auth() {
           email: true,
         },
         where: {
-          email: String(req.query.email),
+          email: String(req.params.email),
         },
       });
 
       if (!user?.email)
         return res.status(400).json({ error: "User not found" });
+
+      next();
     }
   );
 }
