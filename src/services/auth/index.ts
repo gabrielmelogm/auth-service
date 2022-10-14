@@ -1,26 +1,27 @@
-import { comparePassword, verifyInformations } from "./bcrypt";
+import { comparePassword } from "./bcrypt";
 import { getUser, UserProps } from "../user/user";
 
-export async function getAuth(user: UserProps) {
-  const isError = verifyInformations(user);
+export interface SignInResponse {
+  message: string;
+  status: boolean;
+}
 
-  if (!isError) {
-    const dataUser = (await getUser(user.email)) as UserProps;
-    const isAuth = await comparePassword(user.password, dataUser.password);
-    if (isAuth) {
-      const response = {
-        message: "User authenticate successfully",
-        status: isAuth,
-      };
-      return response;
-    } else {
-      const response = {
-        message: "Incorrect email or password",
-        status: isAuth,
-      };
-      return response;
-    }
+export async function signIn(user: UserProps) {
+  const dataUser = (await getUser(user.email)) as UserProps;
+
+  const isAuth = await comparePassword(user.password, dataUser.password);
+
+  if (isAuth) {
+    const response: SignInResponse = {
+      message: "User authenticate successfully",
+      status: isAuth,
+    };
+    return response;
   } else {
-    return isError;
+    const response: SignInResponse = {
+      message: "Incorrect email or password",
+      status: isAuth,
+    };
+    return response;
   }
 }
