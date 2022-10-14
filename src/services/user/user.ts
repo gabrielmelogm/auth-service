@@ -1,6 +1,5 @@
-import { hashPassword } from "../../controllers/auth";
-import { userExist } from "../../controllers/user";
 import { prisma } from "../../database/prisma";
+import { hashPassword } from "../auth/bcrypt";
 
 export interface UserProps {
   id?: string;
@@ -19,13 +18,27 @@ export interface CrudResultProps {
   user: Omit<UserProps, "password">;
 }
 
+export async function getUser(email: string) {
+  try {
+    const dataUser = (await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    })) as UserProps;
+
+    return dataUser;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function createUser({ user }: CrudUserProps) {
   const { email, name } = user;
 
   const password = await hashPassword(user.password);
 
   try {
-    const userEmail = await userExist(email);
+    const userEmail = await getUser(email);
 
     if (!userEmail) {
       const user = await prisma.user.create({
@@ -54,7 +67,7 @@ export async function createUser({ user }: CrudUserProps) {
 
 export async function deleteUser(email: string) {
   try {
-    const userEmail = await userExist(email);
+    const userEmail = await getUser(email);
 
     if (userEmail) {
       const user = await prisma.user.delete({
