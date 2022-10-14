@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { UserProps } from "../user/user";
 
 export async function hashPassword(password: string) {
   const hash = await bcrypt.hash(password, 10);
