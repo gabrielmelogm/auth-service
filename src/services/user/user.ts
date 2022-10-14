@@ -1,5 +1,5 @@
-import { hashPassword } from "../../controllers/auth";
 import { prisma } from "../../database/prisma";
+import { hashPassword } from "../auth/bcrypt";
 
 export interface UserProps {
   id?: string;
