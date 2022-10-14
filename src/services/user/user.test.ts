@@ -7,25 +7,29 @@ const user = {
   password: "123456",
 };
 
-describe("should be able to create user", async () => {
-  it("should be able to create a new user", async () => {
+describe("Deve ser possível criar um usuário", async () => {
+  it("Deve ser possível criar um novo usuário", async () => {
     const response = await createUser({ user });
     expect(response?.message).toEqual("User created successfully");
   });
 
-  it("should not possible to create a same user", async () => {
+  it("Não deve ser possível criar um novo usuário com o mesmo email", async () => {
     const response = await createUser({ user });
     expect(response?.message).toEqual("User already exist");
   });
+
+  it.todo(
+    "Deve retornar true quando comparar a senha criada com o check da lib"
+  );
 });
 
-describe("should be able to deleted a user", async () => {
-  it("should be able to deleted a existing user", async () => {
+describe("Deve ser possível deletar um usuário", async () => {
+  it("Deve ser possível deletar um usuário existente", async () => {
     const response = await deleteUser(user.email);
     expect(response?.message).toEqual("User deleted successfully");
   });
 
-  it("should not possible delete a user that does not exist", async () => {
+  it("Não deve ser possível deletar um usuário que não existe", async () => {
     const response = await deleteUser(user.email);
     expect(response?.message).toEqual("User not found");
   });
