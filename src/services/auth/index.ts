@@ -1,4 +1,4 @@
-import { comparePassword, verifyInformations } from "../../controllers/auth";
+import { comparePassword, verifyInformations } from "./bcrypt";
 import { getUser, UserProps } from "../user/user";
 
 export async function getAuth(user: UserProps) {
