@@ -1,26 +1,41 @@
-import { comparePassword, verifyInformations } from "./bcrypt";
+import { comparePassword } from "./bcrypt";
 import { getUser, UserProps } from "../user/user";
+import jwt from "jsonwebtoken";
+import { config } from "../../config/auth";
 
-export async function getAuth(user: UserProps) {
-  const isError = verifyInformations(user);
+export interface logInResponse {
+  message: string;
+  status: boolean;
+  token?: string;
+}
 
-  if (!isError) {
-    const dataUser = (await getUser(user.email)) as UserProps;
-    const isAuth = await comparePassword(user.password, dataUser.password);
-    if (isAuth) {
-      const response = {
-        message: "User authenticate successfully",
-        status: isAuth,
-      };
-      return response;
-    } else {
-      const response = {
-        message: "Incorrect email or password",
-        status: isAuth,
-      };
-      return response;
-    }
+export async function logIn(user: UserProps) {
+  const dataUser = (await getUser(user.email)) as UserProps;
+
+  if (!dataUser) {
+    const response: logInResponse = {
+      message: "User not found",
+      status: false,
+    };
+    return response;
+  }
+
+  const isAuth = await comparePassword(user.password, dataUser.password);
+
+  if (isAuth) {
+    const response: logInResponse = {
+      message: "User authenticate successfully",
+      status: isAuth,
+      token: jwt.sign({ id: dataUser.id }, String(config.secret), {
+        expiresIn: config.expireIn,
+      }),
+    };
+    return response;
   } else {
-    return isError;
+    const response: logInResponse = {
+      message: "Incorrect email or password",
+      status: isAuth,
+    };
+    return response;
   }
 }
