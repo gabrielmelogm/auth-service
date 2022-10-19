@@ -1,9 +1,11 @@
-import { route, Routes } from "./routes";
+import { route } from "./routes";
+import express from "express";
 
 process.on("SIGTERM", () => process.exit());
 
-Routes();
+export const app = express();
 
-route.listen(process.env.PORT || "3333", () =>
-  console.log("Server is running")
-);
+app.use(express.json());
+app.use(route);
+
+app.listen(process.env.PORT || "3333", () => console.log("Server is running"));
