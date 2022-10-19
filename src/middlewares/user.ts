@@ -1,5 +1,5 @@
-import { route } from "../index";
 import { Request, Response, NextFunction } from "express";
+import { route } from "../routes";
 
 export function UserMiddleware() {
   route.use(

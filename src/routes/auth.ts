@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { route } from "..";
+import { route } from ".";
 import { AuthMiddleware } from "../middlewares/auth";
 import { logIn, logInResponse } from "../services/auth";
 
