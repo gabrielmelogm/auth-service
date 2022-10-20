@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { comparePassword, hashPassword } from "./bcrypt";
+import { comparePassword, hashPassword } from "../services/auth/bcrypt";
 
 const password = "123456";
 
