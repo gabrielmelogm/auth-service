@@ -5,6 +5,7 @@ import {
   CreateUserController,
   DeleteUserController,
   GetUserController,
+  UpdateUserController,
 } from "./controllers/user";
 import { HelloWorldMiddleware } from "./middlewares";
 import { AuthMiddleware } from "./middlewares/auth";
@@ -21,6 +22,7 @@ route
   .route("/user")
   .get(GetUserController)
   .post(CreateUserController)
+  .put(UpdateUserController)
   .delete(DeleteUserController);
 
 export { route };
