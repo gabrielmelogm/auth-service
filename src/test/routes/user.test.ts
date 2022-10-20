@@ -31,7 +31,9 @@ test("GET /login - Deve retornar um token do tipo string ao fazer login", async 
 });
 
 test("DELETE /deleteUser - Deve retornar uma resposta de sucesso de deleção", async () => {
-  const response = await superTest(app).delete(`/user/${user.email}`);
+  const response = await superTest(app)
+    .delete("/user")
+    .send({ email: user.email });
   expect(!!response).toEqual(true);
 
   const message = ResponseMessage("delete");

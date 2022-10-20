@@ -26,9 +26,9 @@ export const CreateUserController: ControllerFunction = async (req, res) => {
 
 export const DeleteUserController: ControllerFunction = async (req, res) => {
   let message = ResponseMessage("nodata");
-  if (!req.params.email) return res.status(422).json({ message });
+  if (!req.body.email) return res.status(422).json({ message });
 
-  const email = req.params.email;
+  const email = req.body.email;
 
   message = ResponseMessage("delete");
 
