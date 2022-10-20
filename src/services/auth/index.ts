@@ -12,9 +12,9 @@ export interface logInResponse {
 }
 
 export async function logIn(user: User) {
-  const dataUser = (await getUser(user.email)) as User;
+  const dataUser = (await getUser(user.email, "email")) as User;
 
-  if (!dataUser) {
+  if (!dataUser.id) {
     const message = ResponseMessage("notfound");
 
     const response: logInResponse = {
