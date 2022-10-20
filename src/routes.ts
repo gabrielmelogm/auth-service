@@ -8,8 +8,8 @@ const route = Router();
 
 route.get("/", HelloWorldMiddleware, HelloWorldController);
 
-route.post("/createUser", CreateUserController);
-route.delete("/deleteUser/:email", DeleteUserController);
+route.post("/user", CreateUserController);
+route.delete("/user/:email", DeleteUserController);
 
 route.get("/login", LoginAuthController);
 
