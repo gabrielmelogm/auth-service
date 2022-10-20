@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
-import {
-  createUser,
-  UserProps,
-  CrudResultProps,
-  deleteUser,
-} from "../services/user/user";
+import { User } from "../entities/User";
+import { createUser, CrudResultProps, deleteUser } from "../services/user/user";
 
 export type ControllerFunction = (req: Request, res: Response) => void;
 
@@ -12,7 +8,7 @@ export const CreateUserController: ControllerFunction = async (req, res) => {
   if (!req.body.email || !req.body.name || !req.body.password)
     return res.status(422).json({ message: "Request data is missing" });
 
-  const user: UserProps = req.body;
+  const user: User = req.body;
 
   const response = (await createUser({ user })) as CrudResultProps;
 
