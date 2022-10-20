@@ -81,7 +81,6 @@ export async function createUser(user: User) {
 
 export async function updateUser(user: User) {
   const dataUser: User = await getUser(user.id, "id");
-  console.log(dataUser);
   if (dataUser.id) {
     try {
       const password = await hashPassword(user.password);
