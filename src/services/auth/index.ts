@@ -3,6 +3,7 @@ import { getUser } from "../user/user";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/auth";
 import { User } from "../../entities/User";
+import { ResponseMessage } from "../../config/ResponseMessage";
 
 export interface logInResponse {
   message: string;
@@ -14,8 +15,10 @@ export async function logIn(user: User) {
   const dataUser = (await getUser(user.email)) as User;
 
   if (!dataUser) {
+    const message = ResponseMessage("notfound");
+
     const response: logInResponse = {
-      message: "User not found",
+      message,
       status: false,
     };
     return response;
@@ -33,8 +36,9 @@ export async function logIn(user: User) {
     };
     return response;
   } else {
+    const message = ResponseMessage("notfound");
     const response: logInResponse = {
-      message: "Incorrect email or password",
+      message,
       status: isAuth,
     };
     return response;

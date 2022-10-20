@@ -1,3 +1,4 @@
+import { ResponseMessage } from "../../config/ResponseMessage";
 import { prisma } from "../../database/prisma";
 import { User } from "../../entities/User";
 import { hashPassword } from "../auth/bcrypt";
@@ -45,13 +46,16 @@ export async function createUser({ user }: CrudUserProps) {
         data: { email, name, password: String(password) },
       });
 
+      const message = ResponseMessage("create");
+
       const response: CrudResultProps = {
-        message: "User created successfully",
+        message,
         user,
       };
       return response;
     } else {
-      const response = { message: "User already exist" };
+      const message = ResponseMessage("duplicate");
+      const response = { message };
       return response;
     }
   } catch (error) {
@@ -74,13 +78,16 @@ export async function deleteUser(email: string) {
         where: { email: String(email) },
       });
 
+      const message = ResponseMessage("delete");
+
       const response: CrudResultProps = {
-        message: "User deleted successfully",
+        message,
         user,
       };
       return response;
     } else {
-      const response = { message: "User not found" };
+      const message = ResponseMessage("notfound");
+      const response = { message };
       return response;
     }
   } catch (error) {
