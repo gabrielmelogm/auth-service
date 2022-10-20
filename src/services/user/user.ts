@@ -21,7 +21,12 @@ export async function getUser(email: string) {
       },
     })) as User;
 
-    return dataUser;
+    if (dataUser) {
+      return dataUser;
+    } else {
+      let message = ResponseMessage("notfound");
+      return message;
+    }
   } catch (error) {
     return error;
   }
@@ -33,9 +38,9 @@ export async function createUser({ user }: CrudUserProps) {
   const password = await hashPassword(user.password);
 
   try {
-    const userEmail = await getUser(email);
+    const userEmail = (await getUser(email)) as User;
 
-    if (!userEmail) {
+    if (!userEmail.id) {
       const user = await prisma.user.create({
         select: {
           id: true,

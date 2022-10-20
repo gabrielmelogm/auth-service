@@ -10,7 +10,7 @@ const newUser = {
   password: "123456",
 };
 
-test("POST /createUser - Deve retornar uma resposta de sucesso de criação", async () => {
+test("POST CreateUser - Deve retornar uma resposta de sucesso de criação", async () => {
   const responseToken = await superTest(app).get("/login").send({
     email: user.email,
     password: user.password,
@@ -31,7 +31,25 @@ test("POST /createUser - Deve retornar uma resposta de sucesso de criação", as
   expect(data?.message).toEqual(message);
 });
 
-test("DELETE /deleteUser - Deve retornar uma resposta de sucesso de deleção", async () => {
+test("GET GetUser - Deve retornar um json com os dados do usuário", async () => {
+  const responseToken = await superTest(app).get("/login").send({
+    email: user.email,
+    password: user.password,
+  });
+
+  const dataToken = JSON.parse(responseToken.text);
+
+  const response = await superTest(app)
+    .get("/user")
+    .send(newUser)
+    .set("x-access-token", dataToken?.token);
+
+  expect(!!response).toEqual(true);
+  const data = JSON.parse(response.text);
+  expect(data?.email).toEqual(newUser.email);
+});
+
+test("DELETE DeleteUser - Deve retornar uma resposta de sucesso de deleção", async () => {
   const responseToken = await superTest(app).get("/login").send({
     email: user.email,
     password: user.password,

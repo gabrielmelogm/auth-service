@@ -1,9 +1,33 @@
 import { Request, Response } from "express";
 import { ResponseMessage } from "../config/ResponseMessage";
 import { User } from "../entities/User";
-import { createUser, CrudResultProps, deleteUser } from "../services/user/user";
+import {
+  createUser,
+  CrudResultProps,
+  deleteUser,
+  getUser,
+} from "../services/user/user";
 
 export type ControllerFunction = (req: Request, res: Response) => void;
+
+export const GetUserController: ControllerFunction = async (req, res) => {
+  let message = ResponseMessage("nodata");
+
+  if (!req.body.email) return res.status(422).json({ message });
+
+  const response = (await getUser(req.body.email)) as User | undefined;
+
+  if (response?.id) {
+    const data = {
+      id: response.id,
+      email: response.email,
+      name: response.name,
+    };
+    return res.status(200).send(data);
+  } else {
+    return res.status(400).json({ message: response });
+  }
+};
 
 export const CreateUserController: ControllerFunction = async (req, res) => {
   let message = ResponseMessage("nodata");
