@@ -1,21 +1,15 @@
 import { prisma } from "../../database/prisma";
+import { User } from "../../entities/User";
 import { hashPassword } from "../auth/bcrypt";
-
-export interface UserProps {
-  id?: string;
-  email: string;
-  name: string;
-  password: string;
-}
 
 export interface CrudUserProps {
   message?: string;
-  user: UserProps;
+  user: User;
 }
 
 export interface CrudResultProps {
   message: string;
-  user: Omit<UserProps, "password">;
+  user: Omit<User, "password">;
 }
 
 export async function getUser(email: string) {
@@ -24,7 +18,7 @@ export async function getUser(email: string) {
       where: {
         email: email,
       },
-    })) as UserProps;
+    })) as User;
 
     return dataUser;
   } catch (error) {

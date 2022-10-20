@@ -1,7 +1,8 @@
 import { comparePassword } from "./bcrypt";
-import { getUser, UserProps } from "../user/user";
+import { getUser } from "../user/user";
 import jwt from "jsonwebtoken";
 import { config } from "../../config/auth";
+import { User } from "../../entities/User";
 
 export interface logInResponse {
   message: string;
@@ -9,8 +10,8 @@ export interface logInResponse {
   token?: string;
 }
 
-export async function logIn(user: UserProps) {
-  const dataUser = (await getUser(user.email)) as UserProps;
+export async function logIn(user: User) {
+  const dataUser = (await getUser(user.email)) as User;
 
   if (!dataUser) {
     const response: logInResponse = {
