@@ -1,7 +1,6 @@
 import { expect, test } from "vitest";
 import superTest from "supertest";
 import { app } from "..";
-import { describe, it } from "node:test";
 
 test("GET/ Deve retornar hello world", async () => {
   const response = await superTest(app).get("/");
@@ -21,6 +20,17 @@ test("POST /createUser - Deve retornar como mensagem 'User created successfully'
 
   const data = JSON.parse(response.text);
   expect(data?.message).toEqual("User created successfully");
+});
+
+test("GET /login - Deve retornar um token do tipo string ao fazer login", async () => {
+  const response = await superTest(app).get("/login").send({
+    email: user.email,
+    password: user.password,
+  });
+
+  const data = JSON.parse(response.text);
+  expect(data?.message).toEqual("User authenticate successfully");
+  expect(typeof data?.token).toEqual("string");
 });
 
 test("DELETE /deleteUser - Deve retornar como mensagem 'User deleted successfully'", async () => {
