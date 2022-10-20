@@ -2,15 +2,27 @@ import { expect, test } from "vitest";
 import superTest from "supertest";
 import { app } from "../..";
 import { ResponseMessage } from "../../config/ResponseMessage";
+import { user } from "../../config/userTeste";
 
-const user = {
-  email: "gabriel@test.com.br",
-  name: "Gabriel Melo",
+const newUser = {
+  email: "johndoe@test.com.br",
+  name: "John Doe",
   password: "123456",
 };
 
 test("POST /createUser - Deve retornar uma resposta de sucesso de criação", async () => {
-  const response = await superTest(app).post("/user").send(user);
+  const responseToken = await superTest(app).get("/login").send({
+    email: user.email,
+    password: user.password,
+  });
+
+  const dataToken = JSON.parse(responseToken.text);
+
+  const response = await superTest(app)
+    .post("/user")
+    .send(newUser)
+    .set("x-access-token", dataToken?.token);
+
   expect(!!response).toEqual(true);
 
   const message = ResponseMessage("create");
@@ -19,21 +31,18 @@ test("POST /createUser - Deve retornar uma resposta de sucesso de criação", as
   expect(data?.message).toEqual(message);
 });
 
-test("GET /login - Deve retornar um token do tipo string ao fazer login", async () => {
-  const response = await superTest(app).get("/login").send({
+test("DELETE /deleteUser - Deve retornar uma resposta de sucesso de deleção", async () => {
+  const responseToken = await superTest(app).get("/login").send({
     email: user.email,
     password: user.password,
   });
 
-  const data = JSON.parse(response.text);
-  expect(data?.message).toEqual("User authenticate successfully");
-  expect(typeof data?.token).toEqual("string");
-});
+  const dataToken = JSON.parse(responseToken.text);
 
-test("DELETE /deleteUser - Deve retornar uma resposta de sucesso de deleção", async () => {
   const response = await superTest(app)
     .delete("/user")
-    .send({ email: user.email });
+    .send({ email: newUser.email })
+    .set("x-access-token", dataToken?.token);
   expect(!!response).toEqual(true);
 
   const message = ResponseMessage("delete");
