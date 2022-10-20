@@ -11,6 +11,6 @@ route.get("/", HelloWorldMiddleware, HelloWorldController);
 route.post("/createUser", CreateUserController);
 route.delete("/deleteUser/:email", DeleteUserController);
 
-route.get("/auth", LoginAuthController);
+route.get("/login", LoginAuthController);
 
 export { route };
