@@ -5,6 +5,7 @@ services:
     depends_on:
       - database
     container_name: "cms-server"
+    entrypoint: "./.docker/entrypoint.sh"
     command: yarn dev
     build: .
     ports:

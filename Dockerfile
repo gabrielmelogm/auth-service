@@ -10,4 +10,6 @@ RUN yarn
 
 COPY . .
 
-CMD ["yarn", "dev"]
+RUN echo 'DATABASE_URL="mysql://maximize:cmsmaximize@cms-database/cms"' > .env
+
+RUN chmod +x .docker/entrypoint.sh
