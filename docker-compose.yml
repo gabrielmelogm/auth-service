@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  server:
+    depends_on:
+      - database
+    container_name: "cms-server"
+    command: yarn dev
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - .:/app
+    links:
+      - database
+  database:
+    image: mariadb
+    container_name: "cms-database"
+    ports:
+      - "${MYSQL_PORT}:${MYSQL_PORT}"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+    volumes:
+      - db:/var/lib/mysql/data
+volumes:
+  db:

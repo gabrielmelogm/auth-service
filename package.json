@@ -1,6 +1,6 @@
 {
-  "name": "auth-service",
-  "version": "1.0.0",
+  "name": "cms-maximize",
+  "version": "0.15.0",
   "main": "index.js",
   "license": "MIT",
   "prisma": {
