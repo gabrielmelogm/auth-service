@@ -3,7 +3,7 @@ import { prisma } from "../src/database/prisma";
 import { user } from "../src/config/userTeste";
 
 async function main() {
-  await createUser({ user });
+  await createUser(user);
 }
 
 main()

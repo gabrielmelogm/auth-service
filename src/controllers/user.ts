@@ -32,7 +32,12 @@ export const GetUserController: ControllerFunction = async (req, res) => {
 export const CreateUserController: ControllerFunction = async (req, res) => {
   let message = ResponseMessage("nodata");
 
-  if (!req.body.email || !req.body.name || !req.body.password)
+  if (
+    !req.body.username ||
+    !req.body.email ||
+    !req.body.name ||
+    !req.body.password
+  )
     return res.status(422).json({ message });
 
   const user: User = req.body;
@@ -51,7 +56,13 @@ export const CreateUserController: ControllerFunction = async (req, res) => {
 export const UpdateUserController: ControllerFunction = async (req, res) => {
   let message = ResponseMessage("nodata");
 
-  if (!req.body.id || !req.body.email || !req.body.name || !req.body.password)
+  if (
+    !req.body.id ||
+    !req.body.username ||
+    !req.body.email ||
+    !req.body.name ||
+    !req.body.password
+  )
     return res.status(422).json({ message });
 
   const user: User = req.body;
